@@ -9,7 +9,10 @@ __pycache__/
 
 # Virtual environments
 venv/
-.env/
+.venv/
+
+# Environment files
+.env
 
 # Flask/Instance config
 instance/
