@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0">Create New Task</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('new_task') }}">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="due_date" class="form-label">Due Date <span class="text-danger">*</span></label>
+                            <input type="datetime-local" class="form-control" id="due_date" name="due_date" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="priority" class="form-label">Priority <span class="text-danger">*</span></label>
+                            <select class="form-select" id="priority" name="priority" required>
+                                <option value="High">High</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="category_id" class="form-label">Category (Optional)</label>
+                        <select class="form-select" id="category_id" name="category_id">
+                            <option value="none">No Category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Create Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+{{ super() }}
+<script>
+// Set minimum date/time to current moment
+window.onload = function() {
+    const now = new Date();
+    // Format to YYYY-MM-DDTHH:MM
+    const formattedNow = now.toISOString().slice(0, 16);
+    document.getElementById('due_date').min = formattedNow;
+    
+    // Set default due date to 1 hour from now
+    now.setHours(now.getHours() + 1);
+    const defaultDue = now.toISOString().slice(0, 16);
+    document.getElementById('due_date').value = defaultDue;
+};
+</script>
+{% endblock %}
+
+{% endblock %}
